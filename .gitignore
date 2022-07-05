@@ -1,3 +1,8 @@
+# Profile
+/LMSystem/x64
+/LMSystem/LMSystem/x64/Debug
+/LMSystem/LMSystem/x64/Debug/LMSystem.tlog
+
 # Prerequisites
 *.d
 
