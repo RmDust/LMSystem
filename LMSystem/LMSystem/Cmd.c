@@ -11,6 +11,10 @@
 
 #include "com.rmdust.Cmd.h"
 
+
+static const char* FILENAME = "Cmd.c";
+
+
 extern struct CMD Cmd() {
   struct CMD Copy = {
     .SetWindowColor = &SetWindowColor,

@@ -14,6 +14,8 @@
 #include "com.rmdust.Stream.h"
 
 
+static const char* FILENAME = "Account.c";
+
 static char Name[128];
 static char Password[128];
 
@@ -36,21 +38,28 @@ extern struct ACCOUNT Account() {
 
 
 static bool SignIn() {
-  // 尝试打开文件
   FILE* Path = NULL;
-  fopen_s(&Path, "save/AccountList.txt", "a+");
-
-  // 若文件夹不存在
-  if (Path == NULL) {
+  
+  errno_t Error = fopen_s(&Path, "save/AccountList.txt", "a+,ccs=UTF-8");
+  if (Error != 0) {
     if (_mkdir("save")) {
     }
-    fopen_s(&Path, "save/AccountList.txt", "a+");
+    return -1;
   }
-  // 写入账户信息
-  fprintf_s(Path, "%s\n", Name);
 
-  fclose(Path);
+  if(Path){
+    Error = fprintf_s(Path, "%s\n", Name);
+    if (Error != 0) {
+      return -1;
+    }
+  }
 
+  if(Path){
+    Error = fclose(Path);
+    if (Error == 0) {
+      return -1;
+    }
+  }
   return true;
 }
 
