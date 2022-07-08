@@ -4,6 +4,7 @@
 #pragma once
 
 #include <stdbool.h>
+#include <stdarg.h>
 #include <windows.h>
 
 #ifndef _INC_COM_RMDUST_ARRAYLIST

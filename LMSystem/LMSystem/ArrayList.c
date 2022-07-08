@@ -4,8 +4,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 #include "com.rmdust.ArrayList.h"
+
+
+static const char* FILENAME = "ArrayList.c";
+
 
 extern struct ARRAYLIST* ArrayList() {
   struct ARRAYLIST* Source = malloc(sizeof(struct ARRAYLIST));
@@ -51,15 +56,12 @@ static void Insert(struct ARRAYLIST* Source, struct ARRAYLIST* New) {
 
 static void PrintInfoAll(struct ARRAYLIST* Source) {
   while (Source->Next != NULL) {
-    printf("%s\n", Source->Value);
+    printf("%s", Source->Value);
     Source = Source->Next;
   }
 
   printf("%s", Source->Value);
 }
-
-
-
 
 static bool IsExist(struct ARRAYLIST* Source, char* Str) {
   while (Source->Next != NULL) {
