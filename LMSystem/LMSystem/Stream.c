@@ -13,9 +13,7 @@
 #define ERROR_NOT_CLOSE_IT "Not close such a file"
 #define ERROR_HAVE_IT_ALREADY "Already have such a file"
 
-
 static const char* FILENAME = "Stream.c"; 
-
 
 extern struct STREAM Stream() {
   struct STREAM Copy = {
@@ -32,7 +30,7 @@ static void CreateFileWW(char* FileName) {
   
   errno_t Error = fopen_s(&Path, FileName, "r");
   if (Error != 0) {
-    printf("%s: %s :%s, but the program tries to create", FILENAME, ERROR_NOT_FOUND_IT, FileName);
+    printf("%s: %s :%s, but the program tries to create\n", FILENAME, ERROR_NOT_FOUND_IT, FileName);
 
     Error = fopen_s(&Path, FileName, "a");
     if (Error != 0) {

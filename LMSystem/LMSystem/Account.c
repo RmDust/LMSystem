@@ -2,17 +2,21 @@
 // File Encoding: UTF-8
 
 #include <conio.h>
+#include <direct.h>
 #include <errno.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <direct.h>
 #include <string.h>
 #include <windows.h>
 
 #include "com.rmdust.Account.h"
-#include "com.rmdust.Stream.h"
 
+#define ERROR_NOT_CREATE_IT "Not create such a file"
+#define ERROR_NOT_FOUND_IT "Not found such a file"
+#define ERROR_NOT_CLOSE_IT "Not close such a file"
+#define ERROR_HAVE_IT_ALREADY "Already have such a file"
+#define ERROR_NOT_WRITTEN_IN "Not written in such a file"
 
 static const char* FILENAME = "Account.c";
 
@@ -21,45 +25,39 @@ static char Password[128];
 
 extern struct ACCOUNT Account() {
   struct ACCOUNT Copy = {
-    .SignIn = &SignIn,
-    .IsExist = &IsExist,
-    .SetName = &SetName,
-    .GetName = &GetName,
-    .SetPassword = &SetPassword,
-    .GetPassword = &GetPassword,
-    .PrintInfoAll = &PrintInfoAll,
+      .SignIn = &SignIn,
+      .IsExist = &IsExist,
+      .SetName = &SetName,
+      .GetName = &GetName,
+      .SetPassword = &SetPassword,
+      .GetPassword = &GetPassword,
+      .PrintInfoAll = &PrintInfoAll,
   };
 
   return Copy;
 }
 
-//extern struct ACCOUNTLIST AccountList() {
-//}
-
-
 static bool SignIn() {
   FILE* Path = NULL;
-  
+
   errno_t Error = fopen_s(&Path, "save/AccountList.txt", "a+,ccs=UTF-8");
   if (Error != 0) {
-    if (_mkdir("save")) {
-    }
-    return -1;
+    printf("%s: %s :%s", FILENAME, ERROR_NOT_FOUND_IT, "save/AccountList.txt");
   }
 
-  if(Path){
+  if (Path) {
     Error = fprintf_s(Path, "%s\n", Name);
     if (Error != 0) {
-      return -1;
+      printf("%s: %s :%s", FILENAME, ERROR_NOT_WRITTEN_IN, "save/AccountList.txt");
+      return false;
+    }
+    Error = fclose(Path);
+    if (Error != 0) {
+      printf("%s: %s :%s", FILENAME, ERROR_NOT_CLOSE_IT, "save/AccountList.txt");
+      return false;
     }
   }
 
-  if(Path){
-    Error = fclose(Path);
-    if (Error == 0) {
-      return -1;
-    }
-  }
   return true;
 }
 
