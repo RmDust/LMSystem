@@ -153,7 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ArrayList.c" />
+    <ClCompile Include="LinkedList.c" />
     <ClCompile Include="Stream.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="Account.c" />
@@ -163,7 +163,7 @@
       <FileType>CppCode</FileType>
     </ClCompile>
     <ClInclude Include="com.rmdust.Cmd.h" />
-    <ClInclude Include="com.rmdust.ArrayList.h" />
+    <ClInclude Include="com.rmdust.LinkedList.h" />
     <ClInclude Include="com.rmdust.Stream.h" />
     <ClInclude Include="com.rmdust.Account.h" />
   </ItemGroup>

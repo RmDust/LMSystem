@@ -22,7 +22,7 @@
     <Filter Include="Source Files\com.rmdust.Cmd">
       <UniqueIdentifier>{5829711e-1d6a-48e5-aeb8-3c36b01e9d46}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\com.rmdust.ArrayList">
+    <Filter Include="Source Files\com.rmdust.LinkedList">
       <UniqueIdentifier>{df9e7222-e8ed-47b9-8a4b-f9a1f5bca11e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -39,8 +39,8 @@
     <ClCompile Include="Cmd.c">
       <Filter>Source Files\com.rmdust.Cmd</Filter>
     </ClCompile>
-    <ClCompile Include="ArrayList.c">
-      <Filter>Source Files\com.rmdust.ArrayList</Filter>
+    <ClCompile Include="LinkedList.c">
+      <Filter>Source Files\com.rmdust.LinkedList</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -53,8 +53,8 @@
     <ClInclude Include="com.rmdust.Cmd.h">
       <Filter>Source Files\com.rmdust.Cmd</Filter>
     </ClInclude>
-    <ClInclude Include="com.rmdust.ArrayList.h">
-      <Filter>Source Files\com.rmdust.ArrayList</Filter>
+    <ClInclude Include="com.rmdust.LinkedList.h">
+      <Filter>Source Files\com.rmdust.LinkedList</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -40,6 +40,7 @@ extern struct ACCOUNT Account() {
 static bool SignIn() {
   FILE* Path = NULL;
 
+  // 写入用户名
   errno_t Error = fopen_s(&Path, "save/AccountList.txt", "a+,ccs=UTF-8");
   if (Error != 0) {
     printf("%s: %s :%s", FILENAME, ERROR_NOT_FOUND_IT, "save/AccountList.txt");
@@ -54,6 +55,27 @@ static bool SignIn() {
     Error = fclose(Path);
     if (Error != 0) {
       printf("%s: %s :%s", FILENAME, ERROR_NOT_CLOSE_IT, "save/AccountList.txt");
+      return false;
+    }
+  }
+
+  // 写入密码
+  Error = fopen_s(&Path, "save/PasswordList.txt", "a+,ccs=UTF-8");
+  if (Error != 0) {
+    printf("%s: %s :%s", FILENAME, ERROR_NOT_FOUND_IT, "save/PasswordList.txt");
+  }
+
+  if (Path) {
+    Error = fprintf_s(Path, "%s\n", Name);
+    if (Error != 0) {
+      printf("%s: %s :%s", FILENAME, ERROR_NOT_WRITTEN_IN,
+             "save/PasswordList.txt");
+      return false;
+    }
+    Error = fclose(Path);
+    if (Error != 0) {
+      printf("%s: %s :%s", FILENAME, ERROR_NOT_CLOSE_IT,
+             "save/PasswordList.txt");
       return false;
     }
   }
