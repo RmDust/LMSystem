@@ -153,16 +153,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Console.Menu.c" />
     <ClCompile Include="LinkedList.c" />
     <ClCompile Include="Stream.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="Account.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Cmd.c">
+    <ClCompile Include="Console.c">
       <FileType>CppCode</FileType>
     </ClCompile>
-    <ClInclude Include="com.rmdust.Cmd.h" />
+    <ClInclude Include="com.rmdust.Console.h" />
+    <ClInclude Include="com.rmdust.Console.Menu.h" />
     <ClInclude Include="com.rmdust.LinkedList.h" />
     <ClInclude Include="com.rmdust.Stream.h" />
     <ClInclude Include="com.rmdust.Account.h" />

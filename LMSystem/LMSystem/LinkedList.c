@@ -32,6 +32,7 @@ extern struct CONTAINER Container() {
       .IsExist = &IsExist,
       .IndexOf = &IndexOf,
       .GetByIndex = &GetByIndex,
+      .Count = &Count,
   };
 
   return Copy;
@@ -104,4 +105,15 @@ static char* GetByIndex(struct LINKEDLIST* Source, int Index) {
 
   
   return "";
+}
+
+static size_t Count(struct LINKEDLIST* Source) {
+  size_t Count = 0;
+  
+  while (Source->Next != NULL) {
+    Count ++;
+    Source = Source->Next;
+  }
+
+  return Count;
 }
