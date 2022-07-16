@@ -91,11 +91,11 @@ static char* GetByIndex(struct LINKEDLIST* Source, int Index) {
     return "";
   }
 
-  for (size_t Count = 0; Source->Next != NULL; Count ++) {
+  for (size_t Count = 0; Source->Next != NULL; Count++) {
     if (Index == Count) {
-      return Source->Value; 
+      return Source->Value;
     }
-    
+
     if (Index < Count) {
       return "";
     }
@@ -103,17 +103,17 @@ static char* GetByIndex(struct LINKEDLIST* Source, int Index) {
     Source = Source->Next;
   }
 
-  
   return "";
 }
 
 static size_t Count(struct LINKEDLIST* Source) {
   size_t Count = 0;
-  
+
   while (Source->Next != NULL) {
-    Count ++;
+    Count++;
     Source = Source->Next;
   }
 
   return Count;
 }
+

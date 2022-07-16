@@ -3,8 +3,8 @@
 
 #include <direct.h>
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "com.rmdust.Stream.h"
 
@@ -13,13 +13,16 @@
 #define ERROR_NOT_CLOSE_IT "Not close such a file"
 #define ERROR_HAVE_IT_ALREADY "Already have such a file"
 
-static const char* FILENAME = "Stream.c"; 
+static const char* FILENAME = "Stream.c";
 
 extern struct STREAM Stream() {
   struct STREAM Copy = {
       .CreateFile = &CreateFileWW,
-      .CreateFolder = &CreateFolder, 
+      .CreateFolder = &CreateFolder,
       .ReadAllLine = &ReadAllLine,
+      .Write = &Write,
+      .WriteLine = &WriteLine,
+      .Clear = &Clear,
   };
 
   return Copy;
@@ -27,10 +30,11 @@ extern struct STREAM Stream() {
 
 static void CreateFileWW(char* FileName) {
   FILE* Path = NULL;
-  
+
   errno_t Error = fopen_s(&Path, FileName, "r");
   if (Error != 0) {
-    printf("%s: %s :%s, but the program tries to create\n", FILENAME, ERROR_NOT_FOUND_IT, FileName);
+    printf("%s: %s :%s, but the program tries to create\n", FILENAME,
+           ERROR_NOT_FOUND_IT, FileName);
 
     Error = fopen_s(&Path, FileName, "a");
     if (Error != 0) {
@@ -41,7 +45,7 @@ static void CreateFileWW(char* FileName) {
     printf("%s: %s :%s", FILENAME, ERROR_HAVE_IT_ALREADY, FileName);
   }
 
-  if(Path){
+  if (Path) {
     Error = fclose(Path);
     if (Error != 0) {
       printf("%s: %s :%s", FILENAME, ERROR_NOT_CLOSE_IT, FileName);
@@ -64,7 +68,7 @@ static char* ReadAllLine(char* refSource, char* FileName) {
     return "";
   }
 
-  if(Path){
+  if (Path) {
     size_t Index = 0;
 
     refSource[Index] = (char)fgetc(Path);
@@ -81,4 +85,45 @@ static char* ReadAllLine(char* refSource, char* FileName) {
   }
 
   return refSource;
+}
+
+static void Write(char* Source, char* FileName) {
+  FILE* Path = NULL;
+  errno_t Error = fopen_s(&Path, FileName, "a+");
+  if (Error != 0) {
+    printf("%s: %s :%s", FILENAME, ERROR_NOT_FOUND_IT, FileName);
+    return;
+  }
+
+  if (Path) {
+    fprintf(Path, "%s", Source);
+
+    Error = fclose(Path);
+    if (Error != 0) {
+      printf("%s: %s :%s", FILENAME, ERROR_NOT_CLOSE_IT, FileName);
+      return;
+    }
+  }
+}
+
+static void WriteLine(char* Source, char* FileName) {
+  Write(Source, FileName);
+  Write("\n", FileName);
+}
+
+static void Clear(char* FileName) {
+  FILE* Path = NULL;
+  errno_t Error = fopen_s(&Path, FileName, "w");
+  if (Error != 0) {
+    printf("%s: %s :%s", FILENAME, ERROR_NOT_FOUND_IT, FileName);
+    return;
+  }
+
+  if (Path) {
+    Error = fclose(Path);
+    if (Error != 0) {
+      printf("%s: %s :%s", FILENAME, ERROR_NOT_CLOSE_IT, FileName);
+      return;
+    }
+  }
 }

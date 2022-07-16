@@ -4,6 +4,8 @@
 #include <conio.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "com.rmdust.Account.h"
 #include "com.rmdust.Console.Menu.h"
@@ -13,30 +15,219 @@
 
 static const char* FILENAME = "main.c";
 
+struct CONSOLE Window;
+// 用于LinkList相关
+static struct CONTAINER ListContainer;
+// 用于文件读写
+static struct STREAM File;
+
+// 图书信息
+struct LIBRARY {
+  struct LINKEDLIST* Name;
+  struct LINKEDLIST* Auth;
+  struct LINKEDLIST* Pric;
+  struct LINKEDLIST* Time;
+
+  char AllLine[512];
+} Book;
+
+void ReadLibrary() { 
+  File.ReadAllLine(Book.AllLine, "resources/Library.txt");
+
+  for (char Line[128] = "", Index = 0, Count = 0; Index < strlen(Book.AllLine); Index++) {
+    if (Book.AllLine[Index] != '\n') {
+      Line[(int)Count] = Book.AllLine[(int)Index];
+      Count++;
+    } else if (Book.AllLine[Index] == '\n') {
+      char Name[128] = "", Auth[128] = "", Pric[128] = "", Time[128] = "";
+      for (int i = 0, c = 0, v = 0; i < strlen(Line); i++) {
+        if (Line[i] == ',') {
+          c++;
+          v = 0;
+          continue;
+        }
+
+        if (c == 4) {
+          break;
+        }
+
+        if (c == 0) {
+          Name[v] = Line[i];
+        } else if (c == 1) {
+          Auth[v] = Line[i];
+        } else if (c == 2) {
+          Pric[v] = Line[i];
+        } else if (c == 3) {
+          Time[v] = Line[i];
+        }
+        v++;
+      }
+
+      ListContainer.Put(Book.Name, Name);
+      ListContainer.Put(Book.Auth, Auth);
+      ListContainer.Put(Book.Pric, Pric);
+      ListContainer.Put(Book.Time, Time);
+
+      memset(Line, 0, 128 * sizeof(char));
+      Count = 0;
+    }
+  }
+}
+void WriteLibrary() {
+  File.Clear("resources/Library.txt");
+  
+  for (int Index = 0; Index < ListContainer.Count(Book.Name); Index ++) {
+    File.Write(ListContainer.GetByIndex(Book.Name, Index), "resources/Library.txt");
+    File.Write(",", "resources/Library.txt");
+
+    File.Write(ListContainer.GetByIndex(Book.Auth, Index), "resources/Library.txt");
+    File.Write(",", "resources/Library.txt");
+
+    File.Write(ListContainer.GetByIndex(Book.Pric, Index), "resources/Library.txt");
+    File.Write(",", "resources/Library.txt");
+
+    File.Write(ListContainer.GetByIndex(Book.Time, Index), "resources/Library.txt");
+    File.Write(",\n", "resources/Library.txt");
+  }
+}
+
+void InitLibrary() {
+  memset(Book.AllLine, 0, 512 * sizeof(char));
+  Book.Name = LinkedList();
+  Book.Auth = LinkedList();
+  Book.Pric = LinkedList();
+  Book.Time = LinkedList();
+}
+
+void PutLibrary(struct LIBRARY Source) {
+  ListContainer.Put(Book.Name, Source.Name->Value);
+  ListContainer.Put(Book.Auth, Source.Auth->Value);
+  ListContainer.Put(Book.Pric, Source.Pric->Value);
+  ListContainer.Put(Book.Time, Source.Time->Value);
+}
+
+void DeleteLibrary() {}
+
+void Management(void) {
+  // 创建次级菜单
+  struct MENU MainMenu = Menu();
+  struct LINKEDLIST* MainMenuList = LinkedList();
+
+  ListContainer.Put(MainMenuList, "Create a new book\n");
+  ListContainer.Put(MainMenuList, "Delete a book\n");
+  ListContainer.Put(MainMenuList, "Back\n");
+
+  MainMenu.SetCount((int)ListContainer.Count(MainMenuList));
+
+  // 初始化图书信息
+  InitLibrary();
+  ReadLibrary();
+
+  // 1.输出菜单  2.等待输入并根据键入反应
+  while (true) {
+    system("cls");
+
+    for (int Index = 0; Index < ListContainer.Count(MainMenuList); Index++) {
+      printf("%s", *MainMenu.Index == Index ? " -->" : "    ");
+      printf("%s", ListContainer.GetByIndex(MainMenuList, Index));
+    }
+
+    switch (_getch()) {
+      case 'w': case 'W':
+        MainMenu.SetIndex(--*MainMenu.Index);
+        break;
+      case 's': case 'S':
+        MainMenu.SetIndex(++*MainMenu.Index);
+        break;
+      case ' ': switch (*MainMenu.Index) {
+          case 0:
+            char Name[128] = "", Auth[128] = "", Pric[128] = "", Time[128] = "";
+            
+            rewind(stdin);
+
+            printf("Create Name:");
+            scanf_s("%127s", Name, (unsigned)_countof(Name));
+
+            printf("Create Auth:");
+            scanf_s("%127s", Auth, (unsigned)_countof(Auth));
+            
+            printf("Create Pric:");
+            scanf_s("%127s", Pric, (unsigned)_countof(Pric));
+            
+            printf("Create Time:");
+            scanf_s("%127s", Time, (unsigned)_countof(Time));
+
+
+            struct LIBRARY NewBook;
+            NewBook.Name = LinkedList();
+            NewBook.Auth = LinkedList();
+            NewBook.Pric = LinkedList();
+            NewBook.Time = LinkedList();
+
+            ListContainer.Put(NewBook.Name, Name);
+            ListContainer.Put(NewBook.Auth, Auth);
+            ListContainer.Put(NewBook.Pric, Pric);
+            ListContainer.Put(NewBook.Time, Time);
+
+            PutLibrary(NewBook);
+            WriteLibrary();
+
+            free(NewBook.Name);
+            free(NewBook.Auth);
+            free(NewBook.Pric);
+            free(NewBook.Time);
+
+            break;
+          case 1:
+
+            DeleteLibrary();
+            break;
+          case 2:
+            free(Book.Name);
+            free(Book.Auth);
+            free(Book.Pric);
+            free(Book.Time);
+
+            return;
+        }
+        break;
+    }
+  }
+}
+
 void TargetMainMenu(int Value) {
   switch (Value) {
     case 0:
+      Management();
+      system("pause");
+      break;
     case 1:
-
+      Management();
+      break;
     default:
       exit(0);
   }
 }
 
 int main(void) {
+  
+  
+  Window = Console();
+  ListContainer = Container();
+  File = Stream();
+  
   // 初始化窗口大小、颜色
-  struct CONSOLE Window = Console();
   Window.SetWindowColor(COLOR_BRIGHTWHITE, COLOR_BLACK);
   Window.SetWindowSize(120, 20);
 
+  
+/*
   // 读取用户信息
   // 获取本地文件中已有的账户信息成用户列表
   struct LINKEDLIST* AccountList = LinkedList();
   struct LINKEDLIST* PasswordList = LinkedList();
 
   // 用于获取用户信息
-  struct CONTAINER ListContainer = Container();
-  struct STREAM ListStream = Stream();
   struct {
     char Account[128];
     char Password[128];
@@ -44,9 +235,9 @@ int main(void) {
   memset(List.Account, 0, 128 * sizeof(char));
   memset(List.Password, 0, 128 * sizeof(char));
 
-  ListStream.ReadAllLine(List.Account, "save/AccountList.txt");
-  ListStream.ReadAllLine(List.Password, "save/PasswordList.txt");
-
+  File.ReadAllLine(List.Account, "save/AccountList.txt");
+  File.ReadAllLine(List.Password, "save/PasswordList.txt");
+  
   // 用户列表信息格式化
   for (char Line[128] = "", Index = 0, Count = 0; Index < strlen(List.Account);
        Index++) {
@@ -55,7 +246,7 @@ int main(void) {
       Count++;
     } else if (List.Account[Index] == '\n') {
       ListContainer.Put(AccountList, Line);
-      memset(Line, 0, sizeof(Line));
+      memset(Line, 0, 128 * sizeof(char));
       Count = 0;
     }
   }
@@ -66,7 +257,7 @@ int main(void) {
       Count++;
     } else if (List.Password[Index] == '\n') {
       ListContainer.Put(PasswordList, Line);
-      memset(Line, 0, sizeof(Line));
+      memset(Line, 0, 128 * sizeof(char));
       Count = 0;
     }
   }
@@ -74,13 +265,15 @@ int main(void) {
   // 控制台中显示登入提示和用户列表
   printf("Account :\nPassword:\n------------------\n%s------------------\n%s",
          List.Account, List.Password);
-
+  
   // 初始化用户并接受键盘上的账户信息，分别是名称，密码
   struct ACCOUNT User = Account();
   Window.SetConsolePos(10, 0);
   User.SetName();
+  fflush(stdin);
   Window.SetConsolePos(10, 1);
   User.SetPassword();
+  fflush(stdin);
 
   // 判断输入的账户是否存在
   if (ListContainer.IsExist(AccountList, User.GetName())) {
@@ -97,11 +290,12 @@ int main(void) {
     // 尝试将新用户写入到用户文件中
     User.SignIn();
   }
-  // 释放用户列表
+  // 释放列表
   free(AccountList);
+  free(PasswordList);
 
   system("pause");
-
+  */
   // 创建主菜单
   struct MENU MainMenu = Menu();
   struct LINKEDLIST* MainMenuList = LinkedList();

@@ -3,8 +3,8 @@
 
 #include "com.rmdust.Console.Menu.h"
 
-static int Index = 0;
-static int Count = 0;
+ int Index = 0;
+ int Count = 0;
 
 extern struct MENU Menu() {
   struct MENU Copy = {

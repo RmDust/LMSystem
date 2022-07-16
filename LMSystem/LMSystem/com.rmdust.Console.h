@@ -29,6 +29,7 @@ struct CONSOLE {
   void (*SetWindowColor)(int, int);
   void (*SetWindowSize)(int, int);
   void (*SetConsolePos)();
+  char* (*Scanf)(char*, int);
 };
 
 enum COLORINFO {
@@ -56,5 +57,6 @@ extern struct CONSOLE Console();
 static void SetWindowColor(int Background, int Frontground);
 static void SetWindowSize(int Width, int Height);
 static void SetConsolePos(SHORT X, SHORT Y);
+char* Scanf(char refSource[], int Size);
 
 #endif

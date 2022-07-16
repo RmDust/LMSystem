@@ -20,9 +20,12 @@ static int WindowWidth;
 static int WindowHeight;
 
 extern struct CONSOLE Console() {
-  struct CONSOLE Copy = {.SetWindowColor = &SetWindowColor,
-                     .SetWindowSize = &SetWindowSize,
-                     .SetConsolePos = &SetConsolePos};
+  struct CONSOLE Copy = {
+    .SetWindowColor = &SetWindowColor,
+    .SetWindowSize = &SetWindowSize,
+    .SetConsolePos = &SetConsolePos,
+    .Scanf = &Scanf,
+  };
 
   return Copy;
 }
@@ -79,4 +82,18 @@ static void SetConsolePos(SHORT X, SHORT Y) {
 
   HANDLE HOutput = GetStdHandle(STD_OUTPUT_HANDLE);
   SetConsoleCursorPosition(HOutput, point);
+}
+
+char* Scanf(char refSource[], int Size) {
+  for (int Index = 0; Index < Size; Index += 1) {
+    char ch = (char)getchar();
+
+    if (ch == '\n') {
+      break;
+    }
+
+    refSource[Index] = ch;
+  }
+
+  return refSource;
 }
