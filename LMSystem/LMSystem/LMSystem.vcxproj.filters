@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\com.rmdust.Account">
+      <UniqueIdentifier>{7428ddf1-9e15-439e-9952-de456fcec046}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\com.rmdust.Stream">
+      <UniqueIdentifier>{204df9ff-730b-4a8a-a03e-c732703c3471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\com.rmdust.LinkedList">
+      <UniqueIdentifier>{df9e7222-e8ed-47b9-8a4b-f9a1f5bca11e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\com.rmdust.Console.Menu">
+      <UniqueIdentifier>{cc25e741-ab5f-48c0-8e7c-40e3f0b1634e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\com.rmdust.Console">
+      <UniqueIdentifier>{5829711e-1d6a-48e5-aeb8-3c36b01e9d46}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Account.c">
+      <Filter>Source Files\com.rmdust.Account</Filter>
+    </ClCompile>
+    <ClCompile Include="Stream.c">
+      <Filter>Source Files\com.rmdust.Stream</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkedList.c">
+      <Filter>Source Files\com.rmdust.LinkedList</Filter>
+    </ClCompile>
+    <ClCompile Include="Console.c">
+      <Filter>Source Files\com.rmdust.Console</Filter>
+    </ClCompile>
+    <ClCompile Include="Console.Menu.c">
+      <Filter>Source Files\com.rmdust.Console.Menu</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="com.rmdust.Account.h">
+      <Filter>Source Files\com.rmdust.Account</Filter>
+    </ClInclude>
+    <ClInclude Include="com.rmdust.Stream.h">
+      <Filter>Source Files\com.rmdust.Stream</Filter>
+    </ClInclude>
+    <ClInclude Include="com.rmdust.LinkedList.h">
+      <Filter>Source Files\com.rmdust.LinkedList</Filter>
+    </ClInclude>
+    <ClInclude Include="com.rmdust.Console.h">
+      <Filter>Source Files\com.rmdust.Console</Filter>
+    </ClInclude>
+    <ClInclude Include="com.rmdust.Console.Menu.h">
+      <Filter>Source Files\com.rmdust.Console.Menu</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
