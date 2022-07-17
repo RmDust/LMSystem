@@ -175,13 +175,13 @@ int TargetManagementMenu(int Value) {
     case 1:
       
       rewind(stdin);
-      printf("Create Name:");
+      printf("Delete Name:");
       scanf_s("%127s", Name, (unsigned)_countof(Name));
-      printf("Create Auth:");
+      printf("Delete Auth:");
       scanf_s("%127s", Auth, (unsigned)_countof(Auth));
-      printf("Create Pric:");
+      printf("Delete Pric:");
       scanf_s("%127s", Pric, (unsigned)_countof(Pric));
-      printf("Create Time:");
+      printf("Delete Time:");
       scanf_s("%127s", Time, (unsigned)_countof(Time));
 
       ListContainer.Put(NewBook.Name, Name);
