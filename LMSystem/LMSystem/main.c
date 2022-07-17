@@ -339,7 +339,6 @@ int main(void) {
   Window.SetWindowSize(120, 20);
 
   
-/*
   // 读取用户信息
   // 获取本地文件中已有的账户信息成用户列表
   struct LINKEDLIST* AccountList = LinkedList();
@@ -413,7 +412,7 @@ int main(void) {
   free(PasswordList);
 
   system("pause");
-  */
+  
   // 创建主菜单
   MainMenu();
 
