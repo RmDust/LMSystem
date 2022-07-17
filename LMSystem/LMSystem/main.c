@@ -229,10 +229,7 @@ int ManagementMenu(void) {
 
   // 1.输出菜单  2.等待输入并根据键入反应
   while (true) {
-    
-
     system("cls");
-
     for (int Index = 0; Index < ListContainer.Count(MainMenuList); Index++) {
       printf("%s%s", *MainMenu.Index == Index ? " -->" : "    ", ListContainer.GetByIndex(MainMenuList, Index));
     }
@@ -253,10 +250,33 @@ int ManagementMenu(void) {
   }
 }
 
+void LookupLibrary() {
+  InitLibrary();
+  ReadLibrary();
+
+  printf("%-12s%-12s%-12s%-12s\n", "Book", "Author", "Price", "Time");
+
+  for (int Index = 0; Index < ListContainer.Count(Book.Name); Index ++) {
+    printf("%-12s%-12s%-12s%-12s\n", 
+           ListContainer.GetByIndex(Book.Name, Index),
+           ListContainer.GetByIndex(Book.Auth, Index),
+           ListContainer.GetByIndex(Book.Pric, Index),
+           ListContainer.GetByIndex(Book.Time, Index)
+    );
+  }
+
+  free(Book.Name);
+  free(Book.Auth);
+  free(Book.Pric);
+  free(Book.Time);
+
+  system("pause");
+}
+
 int TargetMainMenu(int Value) {
   switch (Value) {
     case 0:
-      
+      LookupLibrary();
       system("pause");
       return 1;
     case 1:
