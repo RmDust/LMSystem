@@ -34,9 +34,12 @@ struct LIBRARY {
 void ReadLibrary() { 
   File.ReadAllLine(Book.AllLine, "resources/Library.txt");
 
-  for (char Line[128] = "", Index = 0, Count = 0; Index < strlen(Book.AllLine); Index++) {
+  char Line[128] = "";
+  memset(Line, 0, 128 * sizeof(char));
+
+  for (int Index = 0, Count = 0; Index < strlen(Book.AllLine); Index++) {
     if (Book.AllLine[Index] != '\n') {
-      Line[(int)Count] = Book.AllLine[(int)Index];
+      Line[Count] = Book.AllLine[Index];
       Count++;
     } else if (Book.AllLine[Index] == '\n') {
       char Name[128] = "", Auth[128] = "", Pric[128] = "", Time[128] = "";
@@ -106,9 +109,114 @@ void PutLibrary(struct LIBRARY Source) {
   ListContainer.Put(Book.Time, Source.Time->Value);
 }
 
-void DeleteLibrary() {}
+void DeleteLibrary(struct LIBRARY Source) {
 
-void Management(void) {
+  int Index = ListContainer.IndexOf(Book.Name, Source.Name->Value);
+
+  if (Index == -1) {
+    printf("Info may be inconsistent.");
+    return;
+  }
+
+  if (strcmp(ListContainer.GetByIndex(Book.Auth, Index), Source.Auth->Value) !=
+          0 ||
+      strcmp(ListContainer.GetByIndex(Book.Pric, Index), Source.Pric->Value) !=
+          0 ||
+      strcmp(ListContainer.GetByIndex(Book.Time, Index), Source.Time->Value) !=
+          0) {
+    printf("Info may be inconsistent.");
+    return;
+  }
+
+  ListContainer.Delete(Book.Name, Source.Name->Value);
+  ListContainer.Delete(Book.Auth, Source.Auth->Value);
+  ListContainer.Delete(Book.Pric, Source.Pric->Value);
+  ListContainer.Delete(Book.Time, Source.Time->Value);
+}
+
+int TargetManagementMenu(int Value) {
+  char Name[128] = "", Auth[128] = "", Pric[128] = "", Time[128] = "";
+
+  // 初始化图书信息
+  InitLibrary();
+  ReadLibrary();
+
+  struct LIBRARY NewBook;
+  NewBook.Name = LinkedList();
+  NewBook.Auth = LinkedList();
+  NewBook.Pric = LinkedList();
+  NewBook.Time = LinkedList();
+
+  switch (Value) {
+    case 0:
+      rewind(stdin);
+      printf("Create Name:");
+      scanf_s("%127s", Name, (unsigned)_countof(Name));
+      printf("Create Auth:");
+      scanf_s("%127s", Auth, (unsigned)_countof(Auth));
+      printf("Create Pric:");
+      scanf_s("%127s", Pric, (unsigned)_countof(Pric));
+      printf("Create Time:");
+      scanf_s("%127s", Time, (unsigned)_countof(Time));
+
+      ListContainer.Put(NewBook.Name, Name);
+      ListContainer.Put(NewBook.Auth, Auth);
+      ListContainer.Put(NewBook.Pric, Pric);
+      ListContainer.Put(NewBook.Time, Time);
+
+      PutLibrary(NewBook);
+      WriteLibrary();
+
+      free(NewBook.Name);
+      free(NewBook.Auth);
+      free(NewBook.Pric);
+      free(NewBook.Time);
+      break;
+    case 1:
+      
+      rewind(stdin);
+      printf("Create Name:");
+      scanf_s("%127s", Name, (unsigned)_countof(Name));
+      printf("Create Auth:");
+      scanf_s("%127s", Auth, (unsigned)_countof(Auth));
+      printf("Create Pric:");
+      scanf_s("%127s", Pric, (unsigned)_countof(Pric));
+      printf("Create Time:");
+      scanf_s("%127s", Time, (unsigned)_countof(Time));
+
+      ListContainer.Put(NewBook.Name, Name);
+      ListContainer.Put(NewBook.Auth, Auth);
+      ListContainer.Put(NewBook.Pric, Pric);
+      ListContainer.Put(NewBook.Time, Time);
+
+      DeleteLibrary(NewBook);
+      system("pause");
+      WriteLibrary();
+
+      free(NewBook.Name);
+      free(NewBook.Auth);
+      free(NewBook.Pric);
+      free(NewBook.Time);
+      
+      break;
+    case 2:
+      free(NewBook.Name);
+      free(NewBook.Auth);
+      free(NewBook.Pric);
+      free(NewBook.Time);
+
+      return 0;
+  }
+
+  free(Book.Name);
+  free(Book.Auth);
+  free(Book.Pric);
+  free(Book.Time);
+
+  return 1;
+}
+
+int ManagementMenu(void) {
   // 创建次级菜单
   struct MENU MainMenu = Menu();
   struct LINKEDLIST* MainMenuList = LinkedList();
@@ -119,17 +227,14 @@ void Management(void) {
 
   MainMenu.SetCount((int)ListContainer.Count(MainMenuList));
 
-  // 初始化图书信息
-  InitLibrary();
-  ReadLibrary();
-
   // 1.输出菜单  2.等待输入并根据键入反应
   while (true) {
+    
+
     system("cls");
 
     for (int Index = 0; Index < ListContainer.Count(MainMenuList); Index++) {
-      printf("%s", *MainMenu.Index == Index ? " -->" : "    ");
-      printf("%s", ListContainer.GetByIndex(MainMenuList, Index));
+      printf("%s%s", *MainMenu.Index == Index ? " -->" : "    ", ListContainer.GetByIndex(MainMenuList, Index));
     }
 
     switch (_getch()) {
@@ -139,73 +244,66 @@ void Management(void) {
       case 's': case 'S':
         MainMenu.SetIndex(++*MainMenu.Index);
         break;
-      case ' ': switch (*MainMenu.Index) {
-          case 0:
-            char Name[128] = "", Auth[128] = "", Pric[128] = "", Time[128] = "";
-            
-            rewind(stdin);
-
-            printf("Create Name:");
-            scanf_s("%127s", Name, (unsigned)_countof(Name));
-
-            printf("Create Auth:");
-            scanf_s("%127s", Auth, (unsigned)_countof(Auth));
-            
-            printf("Create Pric:");
-            scanf_s("%127s", Pric, (unsigned)_countof(Pric));
-            
-            printf("Create Time:");
-            scanf_s("%127s", Time, (unsigned)_countof(Time));
-
-
-            struct LIBRARY NewBook;
-            NewBook.Name = LinkedList();
-            NewBook.Auth = LinkedList();
-            NewBook.Pric = LinkedList();
-            NewBook.Time = LinkedList();
-
-            ListContainer.Put(NewBook.Name, Name);
-            ListContainer.Put(NewBook.Auth, Auth);
-            ListContainer.Put(NewBook.Pric, Pric);
-            ListContainer.Put(NewBook.Time, Time);
-
-            PutLibrary(NewBook);
-            WriteLibrary();
-
-            free(NewBook.Name);
-            free(NewBook.Auth);
-            free(NewBook.Pric);
-            free(NewBook.Time);
-
-            break;
-          case 1:
-
-            DeleteLibrary();
-            break;
-          case 2:
-            free(Book.Name);
-            free(Book.Auth);
-            free(Book.Pric);
-            free(Book.Time);
-
-            return;
+      case ' ':
+        if (TargetManagementMenu(*MainMenu.Index) == 0) {
+          return 0;
         }
         break;
     }
   }
 }
 
-void TargetMainMenu(int Value) {
+int TargetMainMenu(int Value) {
   switch (Value) {
     case 0:
-      Management();
+      
       system("pause");
-      break;
+      return 1;
     case 1:
-      Management();
-      break;
-    default:
-      exit(0);
+      ManagementMenu();
+      return 1;
+    case 2:
+      return 0;
+  }
+
+  return 1;
+}
+
+void MainMenu() {
+  struct MENU MainMenu = Menu();
+  struct LINKEDLIST* MainMenuList = LinkedList();
+
+  ListContainer.Put(MainMenuList, "Library\n");
+  ListContainer.Put(MainMenuList, "ManagementMenu\n");
+  ListContainer.Put(MainMenuList, "Exit\n");
+
+  MainMenu.SetCount((int)ListContainer.Count(MainMenuList));
+
+  // 1.输出菜单  2.等待输入并根据键入反应
+  while (true) {
+    system("cls");
+
+    for (int Index = 0; Index < ListContainer.Count(MainMenuList); Index++) {
+      printf("%s%s", *MainMenu.Index == Index ? " -->" : "    ", ListContainer.GetByIndex(MainMenuList, Index));
+    }
+
+    switch (_getch()) {
+      case 'w':
+      case 'W':
+        MainMenu.SetIndex(--*MainMenu.Index);
+        break;
+      case 's':
+      case 'S':
+        MainMenu.SetIndex(++*MainMenu.Index);
+        break;
+      case ' ':
+        // 按下空格后执行菜单对应的行为
+        if (TargetMainMenu(*MainMenu.Index) == 0) {
+          free(MainMenuList);
+          return;
+        }
+        break;
+    }
   }
 }
 
@@ -297,39 +395,7 @@ int main(void) {
   system("pause");
   */
   // 创建主菜单
-  struct MENU MainMenu = Menu();
-  struct LINKEDLIST* MainMenuList = LinkedList();
-
-  ListContainer.Put(MainMenuList, "Library\n");
-  ListContainer.Put(MainMenuList, "Management\n");
-  ListContainer.Put(MainMenuList, "Exit\n");
-
-  MainMenu.SetCount((int)ListContainer.Count(MainMenuList));
-
-  // 1.输出菜单  2.等待输入并根据键入反应
-  while (true) {
-    system("cls");
-
-    for (int Index = 0; Index < ListContainer.Count(MainMenuList); Index++) {
-      printf("%s", *MainMenu.Index == Index ? " -->" : "    ");
-      printf("%s", ListContainer.GetByIndex(MainMenuList, Index));
-    }
-
-    switch (_getch()) {
-      case 'w':
-      case 'W':
-        MainMenu.SetIndex(--*MainMenu.Index);
-        break;
-      case 's':
-      case 'S':
-        MainMenu.SetIndex(++*MainMenu.Index);
-        break;
-      case ' ':
-        // 按下空格后执行菜单对应的行为
-        TargetMainMenu(*MainMenu.Index);
-        break;
-    }
-  }
+  MainMenu();
 
   return 0;
 }

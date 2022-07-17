@@ -23,6 +23,7 @@ struct CONTAINER {
   int (*IndexOf)(struct LINKEDLIST*, char*);
   char* (*GetByIndex)(struct LINKEDLIST*, int);
   size_t (*Count)(struct LINKEDLIST*);
+  int (*Delete)(struct LINKEDLIST*, char*);
 };
 
 extern struct LINKEDLIST* LinkedList();
@@ -35,5 +36,6 @@ static bool IsExist(struct LINKEDLIST* Source, char* Str);
 static int IndexOf(struct LINKEDLIST* Source, char* Value);
 static char* GetByIndex(struct LINKEDLIST* Source, int Index);
 static size_t Count(struct LINKEDLIST* Source);
+static int Delete(struct LINKEDLIST* Source, char* Value);
 
 #endif

@@ -1,4 +1,4 @@
-
+﻿
 // File Encoding: UTF-8
 
 #include <stdarg.h>
@@ -33,6 +33,7 @@ extern struct CONTAINER Container() {
       .IndexOf = &IndexOf,
       .GetByIndex = &GetByIndex,
       .Count = &Count,
+      .Delete = &Delete,
   };
 
   return Copy;
@@ -117,3 +118,30 @@ static size_t Count(struct LINKEDLIST* Source) {
   return Count;
 }
 
+static int Delete(struct LINKEDLIST* Source, char* Value) {
+  if (strcmp(Source->Value, Value) == 0) {
+    *Source = *(Source->Next);
+    free(Source->Next);
+    return 0;
+  }
+
+  struct LINKEDLIST* Temp = Source;
+  while (Temp->Next != NULL) {
+    Source = Temp;
+    Temp = Temp->Next;
+
+    if (strcmp(Temp->Value, Value) == 0) {
+
+      if (Temp->Next == NULL) {
+        Source->Next = NULL;
+      } else {
+        Source->Next = Temp->Next;
+      }
+      free(Temp);
+
+      return 0;
+    }
+  }
+
+  return -1;
+}
